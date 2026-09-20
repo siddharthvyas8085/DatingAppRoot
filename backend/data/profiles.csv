@@ -1,0 +1,3 @@
+id,name,gender,date_of_birth,bio,occupation,city,profile_image_url,created_at,updated_at
+like-user-a,A,female,1994-01-01,Test user,Engineer,Delhi,,2026-09-20T12:03:28.360635+00:00,2026-09-20T12:03:28.360635+00:00
+like-user-b,B,male,1994-01-01,Test user,Engineer,Delhi,,2026-09-20T12:03:28.365453+00:00,2026-09-20T12:03:28.365453+00:00
