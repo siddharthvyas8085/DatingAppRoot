@@ -67,6 +67,26 @@ def get_my_profile(
         )
 
 
+@router.get(
+    "/{user_id}",
+    response_model=ProfileResponse,
+)
+def get_profile_by_id(
+    user_id: str,
+    current_user: dict = Depends(get_current_user),
+):
+    try:
+        profile = profile_service.get_profile(user_id)
+        if profile["id"] == current_user["id"]:
+            return profile
+        return profile
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(error),
+        ) from error
+
+
 @router.put(
     "/me",
     response_model=ProfileResponse,

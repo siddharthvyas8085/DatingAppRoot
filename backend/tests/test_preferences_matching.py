@@ -1,8 +1,13 @@
 from pathlib import Path
 
+from fastapi.testclient import TestClient
+
+from app.main import app
 from app.repositories.csv_repository import CSVRepository
 from app.services.match_service import match_service
 from app.services.preferences_service import preferences_service
+
+client = TestClient(app)
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 
@@ -148,3 +153,25 @@ def test_like_flow_creates_match_when_mutual_like_happens():
     assert second_like["matched"] is True
     assert second_like["match"]["user1_id"] in {user_a, user_b}
     assert second_like["match"]["user2_id"] in {user_a, user_b}
+
+
+def test_get_profile_by_id_route_requires_authentication():
+    clear_csv_state()
+    repo = CSVRepository()
+    user_id = "profile-route-user"
+    repo.create_profile({
+        "id": user_id,
+        "name": "Charlie",
+        "gender": "male",
+        "date_of_birth": "1992-02-02",
+        "bio": "Looking for a thoughtful match",
+        "occupation": "Teacher",
+        "city": "Bengaluru",
+        "profile_image_url": "",
+        "created_at": repo._now(),
+        "updated_at": repo._now(),
+    })
+
+    response = client.get(f"/profiles/{user_id}")
+
+    assert response.status_code == 401
